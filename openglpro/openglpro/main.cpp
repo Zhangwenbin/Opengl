@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include<vector>
+#include<string.h>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -20,6 +21,7 @@
 #include"objCube.h"
 #include"objLight.h"
 #include"glBindTool.h"
+#include"objSportLight.h"
 using namespace std;
 
 void processInput();	 //输入控制
@@ -37,7 +39,11 @@ const unsigned int SCR_HEIGHT = 600;
 
 GLFWwindow* window;
 Camera camera;
-objLight light;
+objLight* dirLight;
+objLight* pointLight;
+const int POINT_LIGHTS = 4;
+objSportLight* sportLight;
+bool openSportLight;
 
 float lastX, lastY;
 bool firstMouse = true;
@@ -50,23 +56,43 @@ int main() {
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 6.0f)); //创建相机
 
-	light=objLight(glm::vec3(0.0f, 0.0, -2));
-	light.color = glm::vec4(1);
-	light.material = objBase::Material{
-		glm::vec3(1),
-		glm::vec3(1),
-		glm::vec3(1),
-		32
-	};
-	light.isDirection = false;
+	dirLight =new objLight(glm::vec3(0.0f, -2.0, -2));
+	dirLight->color = glm::vec4(1);
+	dirLight->material.ambient = glm::vec3(1);
+	dirLight->material.diffuse = glm::vec3(1);
+	dirLight->material.specular = glm::vec3(1);
+	dirLight->isDirection = true;
 
-	light.name = "light";
-	//light.setShader("vert.glsl", "light_frag.glsl");
-	//light.shader = Shader(light.vs, light.fs);
-	//light.genVertex();
-	//light.setScale(0.5f);
-	//light.processTexture("light1.jpg", &light.texture1, false);
-	//light.processTexture("light2.jpg", &light.texture2, false);
+	pointLight = new objLight[POINT_LIGHTS]{
+		 objLight(glm::vec3(0.0f, -.0, -2)),
+		 objLight(glm::vec3(0.0f, -2.0, -4)),
+		 objLight(glm::vec3(0.0f, -4.0, -6)),
+		 objLight(glm::vec3(0.0f, -6.0, -7)),
+	};
+	for (size_t i = 0; i < POINT_LIGHTS; i++)
+	{
+		auto plight =&pointLight[i];
+		plight->color = glm::vec4(1);
+		plight->material.ambient = glm::vec3(1);
+		plight->material.diffuse = glm::vec3(1);
+		plight->material.specular = glm::vec3(1);
+		plight->isDirection = false;
+		plight->genVertex();
+		plight->setScale(0.5);
+		plight->setShader("res/vert.glsl", "res/fragforlight.glsl");
+	}
+	
+
+	sportLight=new objSportLight();
+
+	sportLight->color = glm::vec4(1);
+	sportLight->material.ambient = glm::vec3(1);
+	sportLight->material.diffuse = glm::vec3(1);
+	sportLight->material.specular = glm::vec3(1);
+	sportLight->isDirection = false;
+	sportLight->cutoff = 5;
+	sportLight->outCutOff = 10;
+
 	vector<objBase> objs;
 
 	glm::vec3 cubePositions[] = {
@@ -84,7 +110,7 @@ int main() {
 	for (size_t i = 0; i < 10; i++)
 	{
 		objCube cube= objCube(cubePositions[i]);  //创建一个cube
-		cube.setShader("res/vert.glsl", "res/fragsportlight.glsl");
+		cube.setShader("res/vert.glsl", "res/frag_lights.glsl");
 		cube.genVertex();
 		cube.setScale(1);
 		cube.processTexture("res/container2.png", &cube.texture1, true);
@@ -98,9 +124,6 @@ int main() {
 			glm::vec3(0.0f, 0.1f, 0.06f),
 			glm::vec3(0.0f, 0.50980392f, 0.50980392f),
 			glm::vec3(0.50196078f, 0.50196078f, 0.50196078f),
-		/*	glm::vec3(1),
-			glm::vec3(1),
-			glm::vec3(1),*/
 			32
 		};
 
@@ -119,13 +142,13 @@ void processObj1(vector<objBase> objs) {
 
 		processInput();	//输入							
 
-		glClearColor(0.2, 0.1, 0.1, 1);    //清除颜色
+		glClearColor(0.7, 0.5, 0.1, 1);    //清除颜色
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //清除颜色缓存和深度缓存
 	
 		for (size_t i = 0; i < objs.size(); i++)
 		{			
 			objs[i].shader.use();
-
+			
 			glm::mat4 model;
 			model = glm::translate(model, objs[i].postion);
 			model = glm::rotate(model, glm::radians((float)glfwGetTime()*5.0f*(i + 1)), objs[i].postion);
@@ -160,49 +183,68 @@ void processObj1(vector<objBase> objs) {
 			objs[i].shader.setVec3("material.diffuse", objs[i].material.diffuse.r, objs[i].material.diffuse.g, objs[i].material.diffuse.b);
 			objs[i].shader.setVec3("material.specular", objs[i].material.specular.r, objs[i].material.specular.g, objs[i].material.specular.b);
 			objs[i].shader.setFloat("material.shiness", objs[i].material.shiness);
+			
+			if (dirLight!=NULL)
+			{
+				objs[i].shader.setVec4("dirlight.position", dirLight->postion.x, dirLight->postion.y, dirLight->postion.z, 0);
+				objs[i].shader.setVec3("dirlight.color", dirLight->color.r, dirLight->color.g, dirLight->color.b);
+				objs[i].shader.setVec3("dirlight.ambient", dirLight->material.ambient.r, dirLight->material.ambient.g, dirLight->material.ambient.b);
+				objs[i].shader.setVec3("dirlight.diffuse", dirLight->material.diffuse.r, dirLight->material.diffuse.g, dirLight->material.diffuse.b);
+				objs[i].shader.setVec3("dirlight.specular", dirLight->material.specular.r, dirLight->material.specular.g, dirLight->material.specular.b);
+			}
+				
+			if (pointLight!=NULL)
+			{
+				for (int j = 0; j < POINT_LIGHTS; j++)
+				{
+					auto plight = &pointLight[j];
+					string key = "poilight[" + to_string(j) +"]";
+					plight->postion = glm::vec3(glm::sin(glfwGetTime())*(i+1),cos(glfwGetTime())*(i+1), cos(glfwGetTime())*(2 + 1));
+					objs[i].shader.setVec4(key+".position", plight->postion.x, plight->postion.y, plight->postion.z, 1);
+					objs[i].shader.setVec3(key + ".color", plight->color.r, plight->color.g, plight->color.b);
+					objs[i].shader.setVec3(key + ".ambient", plight->material.ambient.r, plight->material.ambient.g, plight->material.ambient.b);
+					objs[i].shader.setVec3(key + ".diffuse", plight->material.diffuse.r, plight->material.diffuse.g, plight->material.diffuse.b);
+					objs[i].shader.setVec3(key + ".specular", plight->material.specular.r, plight->material.specular.g, plight->material.specular.b);
 
-			//light.setPos(glm::vec3(0, -5, sin(glfwGetTime()) * 10.0f));
-			if (true)
+					objs[i].shader.setFloat(key + ".constant", 1);
+					objs[i].shader.setFloat(key + ".linear", 0.09f);
+					objs[i].shader.setFloat(key + ".quadratic", 0.03f);
+
+				}
+			
+			}
+
+			if (sportLight != NULL)
 			{
 				//聚光灯
-				objs[i].shader.setVec4("light.position", camera.cameraPos.x, camera.cameraPos.y, camera.cameraPos.z, 1);
-				objs[i].shader.setVec3("light.direction", camera.front.x, camera.front.y, camera.front.z);
-				objs[i].shader.setFloat("light.cutoff", glm::cos(glm::radians(6.5)));
-				objs[i].shader.setFloat("light.outcutoff", glm::cos(glm::radians(10.5)));
-			}
-			else
-			{
-				if (light.isDirection)
-				{
-					objs[i].shader.setVec4("light.position", light.postion.x, light.postion.y, light.postion.z, 0);
-				}
-				else
-				{
-					objs[i].shader.setVec4("light.position", light.postion.x, light.postion.y, light.postion.z, 1.0);
-				}
-			}
-		
+				objs[i].shader.setVec4("spolight.position", camera.cameraPos.x, camera.cameraPos.y, camera.cameraPos.z, 1);
+				objs[i].shader.setVec3("spolight.direction", camera.front.x, camera.front.y, camera.front.z);
+				objs[i].shader.setFloat("spolight.cutoff", glm::cos(glm::radians(sportLight->cutoff)));
+				objs[i].shader.setFloat("spolight.outcutoff", glm::cos(glm::radians(sportLight->outCutOff)));
 
 
-			objs[i].shader.setVec3("light.color",light.color.r, light.color.g, light.color.b);
-			objs[i].shader.setVec3("light.ambient", light.material.ambient.r, light.material.ambient.g, light.material.ambient.b);
-			objs[i].shader.setVec3("light.diffuse", light.material.diffuse.r, light.material.diffuse.g, light.material.diffuse.b);
-			objs[i].shader.setVec3("light.specular", light.material.specular.r, light.material.specular.g, light.material.specular.b);
-			objs[i].shader.setFloat("light.constant", 1);
-			objs[i].shader.setFloat("light.linear", 0.09f);
-			objs[i].shader.setFloat("light.quadratic", 0.03f);
+				objs[i].shader.setVec3("spolight.color", sportLight->color.r, sportLight->color.g, sportLight->color.b);
+				objs[i].shader.setVec3("spolight.ambient", sportLight->material.ambient.r, sportLight->material.ambient.g, sportLight->material.ambient.b);
+				objs[i].shader.setVec3("spolight.diffuse", sportLight->material.diffuse.r, sportLight->material.diffuse.g, sportLight->material.diffuse.b);
+				objs[i].shader.setVec3("spolight.specular", sportLight->material.specular.r, sportLight->material.specular.g, sportLight->material.specular.b);
+			}
+
+	
+			
 			glBindVertexArray(objs[i].VAO);
 			glDrawArrays(GL_TRIANGLES, 0, objs[i].vertCount);  //画顶点
 		
 		}
+
+	
 
 		glfwSwapBuffers(window);//交换缓冲,绘制
 		glfwPollEvents();//检查事件
 	}
 
 	for (size_t i = 0; i < objs.size(); i++) {
-		/*glDeleteVertexArrays(1, &objs[i].VAO);
-		glDeleteBuffers(1, &objs[i].VBO);*/
+		glDeleteVertexArrays(1, &objs[i].VAO);
+		glDeleteBuffers(1, &objs[i].VBO);
 	}
 
 

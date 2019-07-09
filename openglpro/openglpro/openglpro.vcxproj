@@ -138,8 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\frag.glsl" />
-    <None Include="res\fragsportlight.glsl" />
-    <None Include="res\light_frag.glsl" />
+    <None Include="res\frag_lights.glsl" />
     <None Include="res\vert.glsl" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +147,7 @@
     <ClInclude Include="objBase.h" />
     <ClInclude Include="objCube.h" />
     <ClInclude Include="objLight.h" />
+    <ClInclude Include="objSportLight.h" />
     <ClInclude Include="objTriangle.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
@@ -158,8 +158,12 @@
     <ClCompile Include="objBase.cpp" />
     <ClCompile Include="objCube.cpp" />
     <ClCompile Include="objLight.cpp" />
+    <ClCompile Include="objSportLight.cpp" />
     <ClCompile Include="objTriangle.cpp" />
     <ClCompile Include="stb.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\fragforlight.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

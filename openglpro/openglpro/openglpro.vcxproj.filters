@@ -13,39 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="资源文件\shader">
+      <UniqueIdentifier>{48fe1bb2-bcd1-4a77-b062-6ab255eb62d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件\texture">
+      <UniqueIdentifier>{ffafdcb1-b795-4721-be57-6c2fa422bb72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\awesomeface.png">
-      <Filter>资源文件</Filter>
+      <Filter>资源文件\texture</Filter>
     </Image>
     <Image Include="res\container.jpg">
-      <Filter>资源文件</Filter>
+      <Filter>资源文件\texture</Filter>
     </Image>
     <Image Include="res\container2.png">
-      <Filter>资源文件</Filter>
+      <Filter>资源文件\texture</Filter>
     </Image>
     <Image Include="res\container2_specular.png">
-      <Filter>资源文件</Filter>
+      <Filter>资源文件\texture</Filter>
     </Image>
     <Image Include="res\lighting_maps_specular_color.png">
-      <Filter>资源文件</Filter>
+      <Filter>资源文件\texture</Filter>
     </Image>
     <Image Include="res\matrix.jpg">
-      <Filter>资源文件</Filter>
+      <Filter>资源文件\texture</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\frag.glsl">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\fragsportlight.glsl">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="res\light_frag.glsl">
-      <Filter>资源文件</Filter>
-    </None>
     <None Include="res\vert.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="res\frag.glsl">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="res\frag_lights.glsl">
+      <Filter>资源文件\shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +76,9 @@
     <ClInclude Include="stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="objSportLight.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -96,5 +102,13 @@
     <ClCompile Include="..\opengl\src\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="objSportLight.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\fragforlight.glsl">
+      <Filter>资源文件\shader</Filter>
+    </Text>
   </ItemGroup>
 </Project>

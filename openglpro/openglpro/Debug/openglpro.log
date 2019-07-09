@@ -1,22 +1,11 @@
-﻿  glad.c
-c:\program files (x86)\windows kits\10\include\10.0.16299.0\shared\minwindef.h(130): warning C4005: “APIENTRY”: 宏重定义
-  c:\zwb\git\practice\opengl\openglpro\opengl\include\glad\glad.h(32): note: 参见“APIENTRY”的前一个定义
-  stb.cpp
-  objTriangle.cpp
-  objLight.cpp
-  objCube.cpp
-  objBase.cpp
-  main.cpp
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(122): warning C4305: “参数”: 从“double”到“GLfloat”截断
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(170): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(171): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(221): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(264): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(265): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(269): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(270): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(272): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(273): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(281): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-  正在生成代码...
+﻿  main.cpp
+c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(145): warning C4305: “参数”: 从“double”到“GLfloat”截断
+c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(263): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(306): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(307): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(311): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(312): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(314): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(315): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\zwb\git\practice\opengl\openglpro\openglpro\main.cpp(323): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
   openglpro.vcxproj -> C:\zwb\git\Practice\opengl\openglpro\Debug\openglpro.exe
